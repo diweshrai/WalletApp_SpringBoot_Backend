@@ -38,216 +38,226 @@ import jakarta.validation.Valid;
 
 public class CustomerContr {
 
-	@Autowired
-	CustomerImpl cimpl;
-	
-	@Autowired
-	CustomerService cserv;
+    @Autowired
+    CustomerImpl cimpl;
 
-	@Value("${addedDays}")
-	private int addedDays;
+    @Autowired
+    CustomerService cserv;
+
+    @Value("${addedDays}")
+    private int addedDays;
 
 
+    /*
+    Installed the Scheduler which is hiting on time which we set on the scheduler here we are doing a task where if the
+    Customer Id is expired and he still didnt buy the susbcription then the customer status will be inactive
+     */
+    @Scheduled(cron = "30 39 21 * * ?")
+    public void myScheduledTask() {
 
-	@Scheduled(cron = "50 59 17 * * ?")
-	public void myScheduledTask() {
 
-		System.out.println("Task executed at midnight.");
-	}
-	
-	@PostMapping("/addCust")
-	public CustomerDto addcust(@Valid @RequestBody CustomerDto cd) {
+        String res = cimpl.makeCustomerStatusInActive();
 
-		CustomerDto cdto = cimpl.addCustomer(cd);
+        System.out.println(res);
 
-		return cdto;
+    }
 
-	}
+    @PostMapping("/addCust")
+    public CustomerDto addcust(@Valid @RequestBody CustomerDto cd) {
 
-	
-	@PostMapping("/addCustomerwithexpirydate")
-	public Customer addcustWithExpiryDate( @RequestBody CustomerDto cd) {
+        CustomerDto cdto = cimpl.addCustomer(cd);
 
-		Customer cc =  cserv.addCustomerWithExpiryDate(cd, addedDays);
-		
-		return cc;
+        return cdto;
 
-	}
-	
-	
-	
-	@GetMapping("/getall")
-	public List<CustomerDto> getall() {
+    }
 
-		return cimpl.getallCustomer();
-	}
 
-	@GetMapping("/getByLastName/{lname}")
-	public ResponseEntity<String> getbyLastName(@PathVariable String lname) {
-		String res = cimpl.findbyLastName(lname);
+    @PostMapping("/addCustomerwithexpirydate")
+    public Customer addcustWithExpiryDate(@RequestBody CustomerDto cd) {
 
-		return new ResponseEntity<String>(res, HttpStatus.OK);
+        Customer cc = cserv.addCustomerWithExpiryDate(cd, addedDays);
 
-	}
+        return cc;
+
+    }
+
+
+    @GetMapping("/getall")
+    public List<CustomerDto> getall() {
+
+        return cimpl.getallCustomer();
+    }
+
+    @GetMapping("/getByLastName/{lname}")
+    public ResponseEntity<String> getbyLastName(@PathVariable String lname) {
+        String res = cimpl.findbyLastName(lname);
+
+        return new ResponseEntity<String>(res, HttpStatus.OK);
+
+    }
 
 //*********************************  Login Check ******************************************************************************
 
-	@GetMapping("/login/{email}/{pass}")
-	public CustomerDto login(@PathVariable String email, @PathVariable String pass) {
+    @GetMapping("/login/{email}/{pass}")
+    public CustomerDto login(@PathVariable String email, @PathVariable String pass) {
 
-		return cimpl.findbyemail(email, pass);
-	}
+        return cimpl.findbyemail(email, pass);
+    }
 
 // ************************************  Get all Accounts By Customer *******************************************************
 
-	@GetMapping("/getAccountByCustomer/{cid}")
-	public List<AccountDto> getAllAccountByCustomer(@PathVariable int cid) {
-		List<AccountDto> resacc = accserv.findbyCustomer(cid);
+    @GetMapping("/getAccountByCustomer/{cid}")
+    public List<AccountDto> getAllAccountByCustomer(@PathVariable int cid) {
+        List<AccountDto> resacc = accserv.findbyCustomer(cid);
 
-		return resacc;
+        return resacc;
 
-	}
+    }
 
 // ************************************************* Get All Transaction Done By Customer **************************************
 
-	@GetMapping("/allTransactionByCustomer/{cid}")
-	public List<TransactionDto> allTrans(@PathVariable int cid) {
-		return accserv.alltranByCustomer(cid);
-	};
+    @GetMapping("/allTransactionByCustomer/{cid}")
+    public List<TransactionDto> allTrans(@PathVariable int cid) {
+        return accserv.alltranByCustomer(cid);
+    }
 
-	@GetMapping("/getAllAccBy/{cid}")
-	public List<Integer> allAccofC(@PathVariable int cid) {
+    ;
 
-		return accserv.allacountsOfCust(cid);
-	};
+    @GetMapping("/getAllAccBy/{cid}")
+    public List<Integer> allAccofC(@PathVariable int cid) {
+
+        return accserv.allacountsOfCust(cid);
+    }
+
+    ;
 
 // *******************************************  Create Account Table *****************************************************
 
-	@Autowired
-	AccountService accserv;
+    @Autowired
+    AccountService accserv;
 
-	@PostMapping("/addAccount/{id}")
-	public AccountDto addAcc(@PathVariable int id, @RequestBody AccountDto addt) {
+    @PostMapping("/addAccount/{id}")
+    public AccountDto addAcc(@PathVariable int id, @RequestBody AccountDto addt) {
 
-		AccountDto ad1 = accserv.createaccount(addt, id);
+        AccountDto ad1 = accserv.createaccount(addt, id);
 
-		return ad1;
+        return ad1;
 
-	}
+    }
 
-	@GetMapping("/getAllAccount")
-	public List<AccountDto> getAllAccount() {
-		List<AccountDto> acd1 = accserv.showAllAccounts();
+    @GetMapping("/getAllAccount")
+    public List<AccountDto> getAllAccount() {
+        List<AccountDto> acd1 = accserv.showAllAccounts();
 
-		return acd1;
-	}
+        return acd1;
+    }
 
-	@PostMapping("/DepositeMoney/{accno}/{money}/{mess}")
-	public AccountDto addMoney(@PathVariable int accno, @PathVariable int money, @PathVariable String mess) {
-		System.out.println("accno is " + accno + "money" + money);
-		AccountDto acdd = accserv.depositeMoney(accno, money, mess);
-		return acdd;
-	}
+    @PostMapping("/DepositeMoney/{accno}/{money}/{mess}")
+    public AccountDto addMoney(@PathVariable int accno, @PathVariable int money, @PathVariable String mess) {
+        System.out.println("accno is " + accno + "money" + money);
+        AccountDto acdd = accserv.depositeMoney(accno, money, mess);
+        return acdd;
+    }
 
-	@PostMapping("/WidhrawMoney/{accno}/{money}/{mess}")
-	public String widhrawMoney(@PathVariable int accno, @PathVariable int money, @PathVariable String mess) {
-		System.out.println("accno is " + accno + "money" + money);
+    @PostMapping("/WidhrawMoney/{accno}/{money}/{mess}")
+    public String widhrawMoney(@PathVariable int accno, @PathVariable int money, @PathVariable String mess) {
+        System.out.println("accno is " + accno + "money" + money);
 
-		return accserv.widhrawMoney(accno, money, mess);
-	}
+        return accserv.widhrawMoney(accno, money, mess);
+    }
 
 // *****************************  Fund Transfer ********************************************
 
-	@PostMapping("/FundTransfer/{ac1}/{ac2}/{amount}/{mess}")
-	public String fundTransfer(@PathVariable int ac1, @PathVariable int ac2, @PathVariable int amount,
-			@PathVariable String mess) {
+    @PostMapping("/FundTransfer/{ac1}/{ac2}/{amount}/{mess}")
+    public String fundTransfer(@PathVariable int ac1, @PathVariable int ac2, @PathVariable int amount,
+                               @PathVariable String mess) {
 
-		return accserv.fundTransfer(ac1, ac2, amount, mess);
+        return accserv.fundTransfer(ac1, ac2, amount, mess);
 
-	}
+    }
 
 // *************************  Account Repo queries *************************************************
 
-	@GetMapping("/lessThanOpBal")
-	public List<AccountDto> opbalLessThan(@RequestParam double ob) {
-		return accserv.findbyOPlessthan(ob);
-	}
+    @GetMapping("/lessThanOpBal")
+    public List<AccountDto> opbalLessThan(@RequestParam double ob) {
+        return accserv.findbyOPlessthan(ob);
+    }
 
-	@GetMapping("/greaterThanOpBal")
-	public List<AccountDto> oplessThan(@RequestParam double ob) {
-		return accserv.opgreater(ob);
-	}
+    @GetMapping("/greaterThanOpBal")
+    public List<AccountDto> oplessThan(@RequestParam double ob) {
+        return accserv.opgreater(ob);
+    }
 
-	@GetMapping("/DistinctOpBal")
-	public List<AccountDto> DistinctOp(@RequestParam double ob) {
-		return accserv.distinctOp(ob);
-	}
+    @GetMapping("/DistinctOpBal")
+    public List<AccountDto> DistinctOp(@RequestParam double ob) {
+        return accserv.distinctOp(ob);
+    }
 
-	@GetMapping("/AscOpBal")
-	public List<AccountDto> AscOpBal() {
-		return accserv.ascOpBal();
-	}
+    @GetMapping("/AscOpBal")
+    public List<AccountDto> AscOpBal() {
+        return accserv.ascOpBal();
+    }
 
-	@GetMapping("/DescOpBal")
-	public List<AccountDto> DescOpBal() {
-		return accserv.DescOpBal();
-	}
+    @GetMapping("/DescOpBal")
+    public List<AccountDto> DescOpBal() {
+        return accserv.DescOpBal();
+    }
 
-	@GetMapping("/byDate/{st}/{ed}")
-	public List<AccountDto> bydatefind(@PathVariable LocalDate st, @PathVariable LocalDate ed) {
+    @GetMapping("/byDate/{st}/{ed}")
+    public List<AccountDto> bydatefind(@PathVariable LocalDate st, @PathVariable LocalDate ed) {
 
-		return accserv.byDate(st, ed);
-	}
+        return accserv.byDate(st, ed);
+    }
 
 // *************************************************  Customer Repo **************************************
 
-	@GetMapping("/getByFirstName/{fnm}")
-	public List<CustomerDto> firstName(@PathVariable String fnm) {
-		return cimpl.firstnameConatining(fnm);
-	}
+    @GetMapping("/getByFirstName/{fnm}")
+    public List<CustomerDto> firstName(@PathVariable String fnm) {
+        return cimpl.firstnameConatining(fnm);
+    }
 
-	@GetMapping("/getByFirstNameIgnoreCase/{fnm}")
-	public List<CustomerDto> firstNameIgnoreCase(@PathVariable String fnm) {
-		return cimpl.firstNameIgnoreCase(fnm);
-	}
+    @GetMapping("/getByFirstNameIgnoreCase/{fnm}")
+    public List<CustomerDto> firstNameIgnoreCase(@PathVariable String fnm) {
+        return cimpl.firstNameIgnoreCase(fnm);
+    }
 
 // *******************************************  Address Repo******************************************************
 
-	@Autowired
-	AddressService adserv;
+    @Autowired
+    AddressService adserv;
 
-	@GetMapping("/NullAddress")
-	public List<Address> nullAdd() {
-		return adserv.addline2isNUll();
-	}
+    @GetMapping("/NullAddress")
+    public List<Address> nullAdd() {
+        return adserv.addline2isNUll();
+    }
 
-	@GetMapping("/NotNullAddress")
-	public List<Address> notNullAdd() {
-		return adserv.addline2isNotNull();
-	}
+    @GetMapping("/NotNullAddress")
+    public List<Address> notNullAdd() {
+        return adserv.addline2isNotNull();
+    }
 
 // ********************************************************  Transaction Service ***********************************
 
-	@Autowired
-	TransactionService tserv;
+    @Autowired
+    TransactionService tserv;
 
-	@GetMapping("/getAllTransc")
-	public List<Transaction> allTra() {
-		return tserv.allTran();
-	}
+    @GetMapping("/getAllTransc")
+    public List<Transaction> allTra() {
+        return tserv.allTran();
+    }
 
-	@GetMapping("/getAllTranscByPageNumber/{pNumber}/{pSize}")
-	public ResponseEntity<PageResponse> allTranByPageNumber(@PathVariable int pNumber, @PathVariable int pSize) {
+    @GetMapping("/getAllTranscByPageNumber/{pNumber}/{pSize}")
+    public ResponseEntity<PageResponse> allTranByPageNumber(@PathVariable int pNumber, @PathVariable int pSize) {
 
-		PageResponse p = tserv.pagi(pNumber, pSize);
-		return new ResponseEntity<PageResponse>(p, HttpStatus.OK);
-	}
+        PageResponse p = tserv.pagi(pNumber, pSize);
+        return new ResponseEntity<PageResponse>(p, HttpStatus.OK);
+    }
 
-	@GetMapping("/getAllTransactionByFromAccount/{fromAcc}")
-	public List<TransactionDtoImpl> getAllByFromAccountCustom(@PathVariable int fromAcc) {
+    @GetMapping("/getAllTransactionByFromAccount/{fromAcc}")
+    public List<TransactionDtoImpl> getAllByFromAccountCustom(@PathVariable int fromAcc) {
 
-		return tserv.findAllByfromAccount(fromAcc);
+        return tserv.findAllByfromAccount(fromAcc);
 
-	}
+    }
 
 }

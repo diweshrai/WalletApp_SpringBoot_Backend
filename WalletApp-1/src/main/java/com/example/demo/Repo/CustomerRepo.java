@@ -3,6 +3,7 @@ package com.example.demo.Repo;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.example.demo.EnumData.CustomerType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,17 +11,16 @@ import com.example.demo.Model.Customer;
 
 public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 
-	Customer findByEmailIdAndPassword(String email, String password);
+    Customer findByEmailIdAndPassword(String email, String password);
 
-	List<Customer> findByFirstNameContaining(String name);
+    List<Customer> findByFirstNameContaining(String name);
 
-	List<Customer> findByFirstNameIgnoreCase(String fnm);
+    List<Customer> findByFirstNameIgnoreCase(String fnm);
 
-	@Query("select  c.firstName from Customer c where c.lastName=:lastname ")
-	public String findFirstnamebyLastName(String lastname);
+    @Query("select  c.firstName from Customer c where c.lastName=:lastname ")
+    public String findFirstnamebyLastName(String lastname);
 
 
-
-	List<Customer> findByCustomerTypeAndExpiryDateAndCustomerStatus();
+    List<Customer> findByCustomerTypeAndExpiryDateAndCustomerStatus(CustomerType customerType, LocalDate expiryDate, String customerStatus);
 
 }
