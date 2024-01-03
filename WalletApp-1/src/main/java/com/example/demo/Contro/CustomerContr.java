@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +23,11 @@ import com.example.demo.Dto.TransactionDto;
 import com.example.demo.Dto.TransactionDtoImpl;
 import com.example.demo.ImplService.CustomerImpl;
 import com.example.demo.Model.Address;
+import com.example.demo.Model.Customer;
 import com.example.demo.Model.Transaction;
 import com.example.demo.Service.AccountService;
 import com.example.demo.Service.AddressService;
+import com.example.demo.Service.CustomerService;
 import com.example.demo.Service.TransactionService;
 
 import jakarta.validation.Valid;
@@ -31,11 +35,26 @@ import jakarta.validation.Valid;
 @RestController
 //@CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "*")
+
 public class CustomerContr {
 
 	@Autowired
 	CustomerImpl cimpl;
+	
+	@Autowired
+	CustomerService cserv;
 
+	@Value("${addedDays}")
+	private int addedDays;
+
+
+
+	@Scheduled(cron = "50 59 17 * * ?")
+	public void myScheduledTask() {
+
+		System.out.println("Task executed at midnight.");
+	}
+	
 	@PostMapping("/addCust")
 	public CustomerDto addcust(@Valid @RequestBody CustomerDto cd) {
 
@@ -45,6 +64,18 @@ public class CustomerContr {
 
 	}
 
+	
+	@PostMapping("/addCustomerwithexpirydate")
+	public Customer addcustWithExpiryDate( @RequestBody CustomerDto cd) {
+
+		Customer cc =  cserv.addCustomerWithExpiryDate(cd, addedDays);
+		
+		return cc;
+
+	}
+	
+	
+	
 	@GetMapping("/getall")
 	public List<CustomerDto> getall() {
 

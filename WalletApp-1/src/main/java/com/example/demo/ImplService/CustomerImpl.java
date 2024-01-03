@@ -1,5 +1,6 @@
 package com.example.demo.ImplService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Constant.ConstantFile;
 import com.example.demo.Dto.CustomerDto;
+import com.example.demo.EnumData.CustomerType;
 import com.example.demo.Model.Address;
 import com.example.demo.Model.Customer;
 import com.example.demo.Repo.AddressRepo;
@@ -117,6 +120,10 @@ public class CustomerImpl implements CustomerService {
 		return this.customerToDto(cc1);
 	}
 
+	
+	
+	
+	
 //*******************************************  Repo Query
 
 	@Override
@@ -146,5 +153,67 @@ public class CustomerImpl implements CustomerService {
 		return crepo.findFirstnamebyLastName(lName);
 
 	}
+	
+	
+	
+	@Override
+	public Customer addCustomerWithExpiryDate(CustomerDto customer1, int addDays) {
+		Customer c1 = this.DtoToCustomer(customer1);
+
+		Address a11 = this.DtoToAddress(customer1);
+
+		arepo.save(a11);
+
+		c1.setAddress(a11);
+		
+		LocalDate expiryDate = this.addExpiryDate(addDays);
+		
+		c1.setExpiryDate(expiryDate);
+		c1.setCustomerStatus(ConstantFile.STATUS_ACTIVE);
+		c1.setCustomerType(CustomerType.FREE);
+		
+	//	crepo.save(customer1);
+		
+		crepo.save(c1);
+		
+		
+		return c1;
+	};
+	
+	
+	
+	/*
+	 * helping methods 
+	 */
+	
+	
+	
+	private LocalDate addExpiryDate( int daysToAdd) {
+		
+	
+		LocalDate addedDate= LocalDate.now().plusDays(daysToAdd);
+		
+		return addedDate;
+	};
+	
+	
+	public String makeCustomerStatusInActive(){
+
+
+
+		return null;
+	};
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

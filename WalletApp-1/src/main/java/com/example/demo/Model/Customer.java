@@ -4,12 +4,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import com.example.demo.EnumData.CustomerType;
+
+import jakarta.persistence.*;
+//import jakarta.persistence.EnumType;
+//import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,6 +36,14 @@ public class Customer {
 	private String password;
 
 	private LocalDate registrationDate;
+
+	@Enumerated(EnumType.STRING)
+	private CustomerType customerType;
+	
+	private LocalDate expiryDate;
+	
+	private String customerStatus;
+	
 
 	@OneToOne
 	@JoinColumn(name = "addressfkk")

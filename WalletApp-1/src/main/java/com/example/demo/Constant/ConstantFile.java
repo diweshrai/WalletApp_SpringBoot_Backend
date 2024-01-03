@@ -12,5 +12,7 @@ public static final String ERROR_MESS="Something Went Wrong";
 public static final String STATUS_ACTIVE="active";
 
 public static final String STATUS_INACTIVE = "inactive";
+
+
 	
 }

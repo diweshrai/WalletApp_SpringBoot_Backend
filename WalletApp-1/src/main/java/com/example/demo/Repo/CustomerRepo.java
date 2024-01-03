@@ -1,5 +1,6 @@
 package com.example.demo.Repo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +18,9 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 
 	@Query("select  c.firstName from Customer c where c.lastName=:lastname ")
 	public String findFirstnamebyLastName(String lastname);
+
+
+
+	List<Customer> findByCustomerTypeAndExpiryDateAndCustomerStatus();
 
 }
