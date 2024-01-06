@@ -1,10 +1,6 @@
 package com.example.demo.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,18 +12,18 @@ import lombok.NoArgsConstructor;
 @SequenceGenerator(initialValue = 501, name = "addg", sequenceName = "addg")
 public class Address {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addg")
-	private int addressid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addg")
+    private int addressid;
 
-	private String addressLine1;
+    private String addressLine1;
 
-	private String adressLine2;
+    private String adressLine2;
 
-	private String city;
+    private String city;
 
-	private String state;
+    private String state;
 
-	private int pincode;
+    private int pincode;
 
 }

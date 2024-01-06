@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WeightDto {
 
-	private int custid;
+    private int custid;
 
-	private String slotname;
+    private String slotname;
 
-	private int weight;
+    private int weight;
 
 }

@@ -1,21 +1,16 @@
 package com.example.demo.Repo;
 
-import java.util.List;
-
-
+import com.example.demo.Model.Documents;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.Model.Documents;
+import java.util.List;
 
 public interface DocumentsRepo extends JpaRepository<Documents, Integer> {
 
-	List<Documents> findByCustomerId(int customerId);
+    List<Documents> findByCustomerId(int customerId);
 
-	List<Documents> findByCustomerIdAndDocumentTypeAndDocStatus(int customerId, String documentType, String docStatus);
-	
-	List<Documents> findByCustomerIdAndDocStatus(int customerId,  String docStatus);
-	
-	
-	
-	
+    List<Documents> findByCustomerIdAndDocumentTypeAndDocStatus(int customerId, String documentType, String docStatus);
+
+    List<Documents> findByCustomerIdAndDocStatus(int customerId, String docStatus);
+
 }
