@@ -1,15 +1,14 @@
 package com.example.demo.Repo;
 
-import java.util.List;
-
+import com.example.demo.Model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.Model.Address;
+import java.util.List;
 
 public interface AddressRepo extends JpaRepository<Address, Integer> {
 
-	List<Address> findByAdressLine2IsNull();
+    List<Address> findByAdressLine2IsNull();
 
-	List<Address> findByAdressLine2IsNotNull();
+    List<Address> findByAdressLine2IsNotNull();
 
 }

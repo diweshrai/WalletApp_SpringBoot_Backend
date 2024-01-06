@@ -1,17 +1,17 @@
 package com.example.demo.Service;
 
-import java.util.List;
-
 import com.example.demo.Dto.PageResponse;
 import com.example.demo.Dto.TransactionDtoImpl;
 import com.example.demo.Model.Transaction;
 
+import java.util.List;
+
 public interface TransactionService {
 
-	List<Transaction> allTran();
+    List<Transaction> allTran();
 
-	PageResponse pagi(int pNumber, int pSize);
+    PageResponse paginationUsingNumberAndSize(int pNumber, int pSize);
 
-	List<TransactionDtoImpl> findAllByfromAccount(int fromAcc);
+    List<TransactionDtoImpl> findAllByfromAccount(int fromAcc);
 
 }

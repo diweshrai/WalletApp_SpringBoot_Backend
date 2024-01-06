@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Weight {
 
-	@Id
-	@GeneratedValue
-	private int tableid;
+    @Id
+    @GeneratedValue
+    private int tableid;
 
-	private int custid;
+    private int custid;
 
-	private int slots;
+    private int slots;
 
-	private int weight;
+    private int weight;
 
 }

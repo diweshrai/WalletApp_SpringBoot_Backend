@@ -1,15 +1,15 @@
 package com.example.demo.Service;
 
-import java.util.List;
-
 import com.example.demo.Model.Slots;
+
+import java.util.List;
 
 public interface SlotsService {
 
-	public List<Slots> getAllSlots();
+    public List<Slots> getAllSlots();
 
-	public Slots insertSlot(Slots s);
+    public Slots insertSlot(Slots s);
 
-	public Slots findbySlotName(String slotName);
+    public Slots findBySlotName(String slotName);
 
 }

@@ -1,15 +1,11 @@
 package com.example.demo.Model;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -18,21 +14,18 @@ import lombok.NoArgsConstructor;
 @SequenceGenerator(initialValue = 1200, name = "docno", sequenceName = "docno")
 public class Documents {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "docno")
-	private int documentId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "docno")
+    private int documentId;
 
-	private int customerId;
+    private int customerId;
 
-	private String documentType;
+    private String documentType;
 
-	private String documentPath;
+    private String documentPath;
 
-	private String docStatus;
+    private String docStatus;
 
-	private LocalDateTime uploadedDate;
+    private LocalDateTime uploadedDate;
 
-	
-	
-	
 }

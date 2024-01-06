@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Slots {
 
-	@Id
-	private String slotname;
+    @Id
+    private String slotname;
 
-	private int slotid;
+    private int slotid;
 
 }

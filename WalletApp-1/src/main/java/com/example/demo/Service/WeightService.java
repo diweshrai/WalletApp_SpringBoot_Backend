@@ -1,15 +1,15 @@
 package com.example.demo.Service;
 
-import java.util.List;
-
 import com.example.demo.Dto.WeightDto;
 import com.example.demo.Model.Weight;
 
+import java.util.List;
+
 public interface WeightService {
 
-	public List<Weight> getallWeights();
+    public List<Weight> getAllWeights();
 
-	public Weight insertWeight(Weight w);
+    public Weight insertWeight(Weight w);
 
-	public String processAndInsertData(List<WeightDto> weightInputs);
+    public String processAndInsertData(List<WeightDto> weightInputs);
 }

@@ -2,7 +2,7 @@ package com.example.demo.Dto;
 
 public interface TransactionDtoInter {
 
-	int getTransactionId();
+    int getTransactionId();
 
-	String getTransactionType();
+    String getTransactionType();
 }

@@ -1,14 +1,14 @@
 package com.example.demo.ImplService;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 class CustomerImplTest {
 
-	@Test
-	void test() {
-		fail("Not yet implemented");
-	}
+    @Test
+    void test() {
+        fail("Not yet implemented");
+    }
 
 }
