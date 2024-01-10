@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,6 +30,7 @@ public class Account {
 
     @ManyToOne
     @JoinColumn(name = "customerfkk")
+    @JsonIgnore
     private Customer customer;
 
 }
