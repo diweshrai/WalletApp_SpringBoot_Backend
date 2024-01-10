@@ -10,10 +10,13 @@ import com.example.demo.Service.AddressService;
 import com.example.demo.Service.CustomerService;
 import com.example.demo.Service.TransactionService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +30,11 @@ import java.util.List;
 @RestController
 //@CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "*")
-
+@Slf4j
 public class CustomerController {
 
     @Autowired
     CustomerServiceImplementation customerServiceImplementation;
-
     @Autowired
     CustomerService customerService;
     @Autowired
@@ -41,6 +43,7 @@ public class CustomerController {
     AddressService addressService;
     @Autowired
     TransactionService transactionService;
+    
     @Value("${addedDays}")
     private int addedDays;
 
@@ -53,10 +56,17 @@ public class CustomerController {
     public void myScheduledTask() {
         String res = customerServiceImplementation.makeCustomerStatusInActive();
         System.out.println(res);
-
-    }
-
+    };
     /*
+     * Pagination And Sorting And Searching for Customers
+     */
+    @PostMapping("/pagination")
+    public PaginationResponse getAllCustomerUsingPagination(@RequestBody PaginationReuestDto paginationReuestDto){
+    	log.info("Calling method get all customer using pagination with request {}",paginationReuestDto);
+    	return customerService.paginationAndSortingOfCustomer(paginationReuestDto);
+    };
+    
+   /*
      * Download all Customers in excel Format
      */
     @RequestMapping("/downloadAllCustomersInExcel")

@@ -1,8 +1,11 @@
 package com.example.demo.ImplService;
 
 import com.example.demo.Constant.ConstantFile;
+import com.example.demo.Dto.CustomerDataRowGrids;
 import com.example.demo.Dto.CustomerDto;
 import com.example.demo.Dto.CustomerRequestDto;
+import com.example.demo.Dto.PaginationResponse;
+import com.example.demo.Dto.PaginationReuestDto;
 import com.example.demo.EnumData.CustomerType;
 import com.example.demo.ExcelHelperPackage.CustomerExcelDownloadHelper;
 import com.example.demo.ExcelHelperPackage.GettingAllDataOfCustomerFromExcel;
@@ -15,6 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -335,5 +342,51 @@ public class CustomerServiceImplementation implements CustomerService {
         return customer;
 
     }
+    
+    // Pagination and Sorting and Searching for Customers data which is shwoing to Admin Page.....
+     @Override
+    public PaginationResponse paginationAndSortingOfCustomer(PaginationReuestDto paginationReuestDto){
+    	 Sort sorting = paginationReuestDto.getSortedType().equalsIgnoreCase("asc")? Sort.by(paginationReuestDto.getSortByFieldName()).ascending() : Sort.by(paginationReuestDto.getSortByFieldName()).descending();
+    	 Pageable pageable = PageRequest.of(paginationReuestDto.getOffSet(), paginationReuestDto.getLimit(), sorting);
+    	 Page<Customer> pageResult;
+    	 if(paginationReuestDto.getSearchByFieldName()!=null) {
+    		 pageResult = this.customerRepo.findByFirstNameIgnoreCaseContaining(paginationReuestDto.getSearchByFieldName(), pageable);
+    	    } else {
+    	        pageResult = this.customerRepo.findAll(pageable);
+    	    }
+    	    List<CustomerDataRowGrids> dataList = pageResult.getContent().stream()
+    	            .map(this::paginationDataConversion)
+    	            .collect(Collectors.toList());
+     	return new PaginationResponse(dataList, pageResult.getTotalElements(), pageResult.getTotalPages());
+        
+     	 
+      };   	 
+    	 
+    			private CustomerDataRowGrids paginationDataConversion(Customer customer) {
+			
+			CustomerDataRowGrids customerDataRowGrids = new CustomerDataRowGrids();
+			
+			customerDataRowGrids.setCustomerId(customer.getCustomerId());
+			customerDataRowGrids.setFirstName(customer.getFirstName());
+			customerDataRowGrids.setLastName(customer.getLastName());
+			customerDataRowGrids.setGender(customer.getGender());
+			customerDataRowGrids.setEmailId(customer.getEmailId());
+			customerDataRowGrids.setRegistrationDate(customer.getRegistrationDate());
+			customerDataRowGrids.setAddressLine1(customer.getAddress().getAddressLine1());
+			customerDataRowGrids.setAdressLine2(customer.getAddress().getAdressLine2());
+			customerDataRowGrids.setCity(customer.getAddress().getCity());
+			customerDataRowGrids.setContactNo(customer.getContactNo());
+			customerDataRowGrids.setState(customer.getAddress().getState());
+			customerDataRowGrids.setPincode(customer.getAddress().getPincode());
+			
+			return customerDataRowGrids;
+		};
+		
+		
+		
+		
+		
+		
+
 
 }
