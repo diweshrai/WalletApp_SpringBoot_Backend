@@ -9,7 +9,11 @@ import com.example.demo.Service.AccountService;
 import com.example.demo.Service.AddressService;
 import com.example.demo.Service.CustomerService;
 import com.example.demo.Service.TransactionService;
+import com.itextpdf.text.DocumentException;
+
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
+import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +22,14 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -57,6 +63,50 @@ public class CustomerController {
         String res = customerServiceImplementation.makeCustomerStatusInActive();
         System.out.println(res);
     };
+    
+    
+    /*
+     * Download Pdf Using CustomerId by Admin 
+     */
+    
+    
+    @GetMapping("/downloadCustomerDetailInPdfByCustomerId/{customerId}")
+    public ResponseEntity<InputStreamResource> downloadPdfOfCustomerByCustomerId(@PathVariable int customerId) throws DocumentException {
+        ByteArrayInputStream byteArrayInputStream = customerService.generatePdfForCustomerByCustomerId(customerId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=customer_details.pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(byteArrayInputStream));
+    };
+    
+    
+    @DeleteMapping("/deleteCustomer/{customerId}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable int customerId){
+    	 
+    	return new ResponseEntity<String>(customerService.deleteCustomerByCustomerID(customerId) , HttpStatus.OK);
+    };
+    
+    @PostMapping("/activateCustomerStatusActive/{customerId}")
+    public ResponseEntity<String> activateCustomerStatusActive(@PathVariable int customerId){
+    	 
+    	return new ResponseEntity<String>(customerService.updateCustomerStatusActive(customerId) , HttpStatus.OK);
+    } 
+    
+    
+    /*
+     * Edit Customer Details By Admin
+     */
+    @PostMapping("/editCustomerDetailsByAdmin")
+    public ResponseEntity<String> editCustomerDetailsByAdmin(@RequestBody CustomerDataRowGrids customerDataRowGrids){
+    	return new ResponseEntity<String>(customerService.editCustomerDetails(customerDataRowGrids), HttpStatus.OK);
+    }
+    
+    
     /*
      * Pagination And Sorting And Searching for Customers
      */
@@ -126,7 +176,17 @@ public class CustomerController {
 
         return customerServiceImplementation.getAllCustomer();
     }
+    
+    @GetMapping("/getAllCustomer")
+    public List<Customer> getAllCustomerDirect(){
+    	return customerService.getAllCustomerDirect();
+    }
 
+    @GetMapping("/getAlltransaction/{cus}")
+    public List<Transaction> allTransaction(@PathVariable int cus){
+    	return customerService.transaction(cus);
+    }
+    
 // ************************************************* Get All Transaction Done By Customer **************************************
 
     @GetMapping("/getByLastName/{lname}")
