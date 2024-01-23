@@ -1,5 +1,7 @@
 package com.example.demo.Constant;
 
+import com.example.demo.EnumData.Role;
+
 public class ConstantFile {
 
     public static final String IMG_UPLOAD_SUCCESFULLY = "image Uploaded Succesfully";
@@ -13,5 +15,8 @@ public class ConstantFile {
     public static final String STATUS_INACTIVE = "inactive";
 
     public static final String All_CUSTOMERS_EXCEL_DOWNLOAD = "All_Customers";
+    
+    
+    
 
 }

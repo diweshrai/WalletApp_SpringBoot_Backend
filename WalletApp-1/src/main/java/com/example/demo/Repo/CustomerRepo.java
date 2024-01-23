@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 
@@ -20,6 +21,7 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
     List<Customer> findByFirstNameContaining(String name);
     Page<Customer> findByFirstNameContaining(String name, Pageable p);
     Page<Customer> findByFirstNameIgnoreCaseContaining(String firstName, Pageable pageable);
+    Optional<Customer> findByEmailId(String emailId);
     List<Customer> findByFirstNameIgnoreCase(String fnm);
     	
     Customer findByCustomerId(int customerId);

@@ -34,9 +34,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "*")
 @Slf4j
+@RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class CustomerController {
 
     @Autowired
