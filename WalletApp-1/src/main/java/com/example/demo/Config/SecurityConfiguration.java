@@ -30,39 +30,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-  
 	@Autowired
     JwtAuthenticationFilter jwtAuthFilter;
-    @Autowired
+   
+	@Autowired
 	AuthenticationProvider authenticationProvider;
-   // private final LogoutHandler logoutHandler;
-
+   
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
       return  http
     		  .cors().and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/auth/tokenGen")
+                req.requestMatchers("/api/auth/tokenGen")
                                 .permitAll()
-                                
-                                .requestMatchers("/api/v1/management/**").hasAnyAuthority(Role.ADMIN.name())
-                                .requestMatchers( "/users/**").hasAnyAuthority(Role.USER.name())
-                             
+                                .requestMatchers("/admin/api/**").hasAnyAuthority(Role.ADMIN.name())
+                                .requestMatchers( "/users/**" , "/users/images/**").hasAnyAuthority(Role.USER.name())
                                 .anyRequest()
-                                .authenticated()
-                )
+                                .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                .build();
-                
-        
-
-       
-    }
-    
-   
-    
-    
-}
+    } }

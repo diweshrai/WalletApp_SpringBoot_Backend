@@ -14,25 +14,18 @@ import com.example.demo.Dto.UserSignInResponseToken;
 import com.example.demo.Dto.UserSignUpRequest;
 import com.example.demo.Service.AuthenticationService;
 
-
-
 @RestController
 @RequestMapping("/api/auth/")
 @CrossOrigin(origins = "*")
 public class AuthenticationController {
 
-	
-	
 	@Autowired
 	AuthenticationService authenticationService;
 
 		@PostMapping("tokenGen")
 		public ResponseEntity<UserSignInResponseToken> signIn(@RequestBody UserSignIn userSignIn){
-			System.out.println("test");
 			return ResponseEntity.ok(authenticationService.signIn(userSignIn));
 		}
-	
-	
 	
 		@PostMapping("signUpUser")
 		public ResponseEntity<String> signUp(@RequestBody UserSignUpRequest userSignUpRequest){
@@ -43,6 +36,4 @@ public class AuthenticationController {
 		public ResponseEntity<String> signUpAdmin(@RequestBody UserSignUpRequest userSignUpRequest){
 			return ResponseEntity.ok(authenticationService.signUpAdmin(userSignUpRequest));
 		}
-		
-		
 }

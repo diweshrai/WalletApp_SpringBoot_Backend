@@ -10,11 +10,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserSignInResponseToken {
-
-	
 	private String token;
-	
 	private int customerId;
-
-	
 }
