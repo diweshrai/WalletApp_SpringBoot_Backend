@@ -11,4 +11,6 @@ public interface AddressRepo extends JpaRepository<Address, Integer> {
 
     List<Address> findByAdressLine2IsNotNull();
 
+    
+    
 }

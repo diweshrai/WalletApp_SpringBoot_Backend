@@ -2,7 +2,8 @@ package com.example.demo.Dto;
 
 import java.time.LocalDate;
 
-import com.example.demo.Model.Customer;
+import com.example.demo.EnumData.CustomerType;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +25,7 @@ public class CustomerDataRowGrids {
 	    private String city;
 	    private String state;
 	    private int pincode;
+	    private LocalDate expiryDate;
+	    private String customerStatus;
+	    private CustomerType customerType;
 }

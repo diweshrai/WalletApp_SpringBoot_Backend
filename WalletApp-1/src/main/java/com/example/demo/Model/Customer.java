@@ -20,26 +20,18 @@ public class Customer implements Serializable{
     @Id
     @GeneratedValue
     private int customerId;
-
     private String firstName;
-
     private String lastName;
-
     private String emailId;
-
     private int contactNo;
-
     private String Gender;
-
     private String password;
-
     private LocalDate registrationDate;
-
+    
     @Enumerated(EnumType.STRING)
     private CustomerType customerType;
-
+    
     private LocalDate expiryDate;
-
     private String customerStatus;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -47,6 +39,5 @@ public class Customer implements Serializable{
     private Address address;
 
     @OneToMany(targetEntity = Account.class, mappedBy = "customer")
-    private List<Account> account = new ArrayList<>();
-
+    private List<Account> account = new ArrayList<>(); 
 }
