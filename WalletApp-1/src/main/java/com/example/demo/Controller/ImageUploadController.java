@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/users/images")
 @CrossOrigin(origins = "*")
 public class ImageUploadController {
 
