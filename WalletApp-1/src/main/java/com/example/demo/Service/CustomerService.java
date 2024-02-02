@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerService {
     public CustomerDto addCustomer(CustomerDto cd);
@@ -34,4 +35,6 @@ public interface CustomerService {
     public List<Customer> getAllCustomerDirect();
     public ByteArrayInputStream generatePdfForCustomerByCustomerId(int customerId) throws DocumentException;
     public List<Transaction> transaction(int cus);
+    public Optional<Customer> findByEmail(String emailId);
+    
      };
