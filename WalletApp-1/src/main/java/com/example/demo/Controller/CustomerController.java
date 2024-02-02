@@ -9,6 +9,7 @@ import com.example.demo.Service.AccountService;
 import com.example.demo.Service.AddressService;
 import com.example.demo.Service.CustomerService;
 import com.example.demo.Service.TransactionService;
+import com.example.demo.customeAnotation.ValidCustomerId;
 import com.itextpdf.text.DocumentException;
 
 import jakarta.validation.Valid;
@@ -26,17 +27,20 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 @Slf4j
 @RequestMapping("/users")
 @CrossOrigin(origins = "*")
+@Validated
 public class CustomerController {
 
     @Autowired
@@ -58,11 +62,11 @@ public class CustomerController {
      * here we are doing a task where if the Customer Id is expired and he still
      * didnt buy the susbcription then the customer status will be inactive
      */
-    @Scheduled(cron = "30 18 11 * * ?")
-    public void myScheduledTask() {
-        String res = customerServiceImplementation.makeCustomerStatusInActive();
-        System.out.println(res);
-    };
+//    @Scheduled(cron = "30 18 11 * * ?")
+//    public void myScheduledTask() {
+//        String res = customerServiceImplementation.makeCustomerStatusInActive();
+//        System.out.println(res);
+//    };
     
   
 
@@ -94,10 +98,10 @@ public class CustomerController {
     }
 
     @GetMapping("/getAlltransaction/{cus}")
-    public List<Transaction> allTransaction(@PathVariable int cus){
-    	return customerService.transaction(cus);
+    public ResponseEntity<List<Transaction>> allTransaction(@ValidCustomerId @PathVariable int cus) {
+    	return ResponseEntity.ok(customerService.transaction(cus));
     }
-    
+   
 // ************************************************* Get All Transaction Done By Customer **************************************
 
     @GetMapping("/getByLastName/{lname}")

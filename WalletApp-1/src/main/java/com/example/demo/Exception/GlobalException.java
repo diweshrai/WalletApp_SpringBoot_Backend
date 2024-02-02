@@ -7,6 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import jakarta.validation.ConstraintViolationException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,15 +34,10 @@ public class GlobalException {
 
     }
 
-//	    @ExceptionHandler(MethodArgumentNotValidException.class)
-//	    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-//	        // Handle validation errors for MethodArgumentNotValidException
-//	        // Construct a response as needed
-//	    }
-//
-//	    @ExceptionHandler(OtherCustomException.class)
-//	    public ResponseEntity<String> handleOtherCustomException(OtherCustomException ex) {
-//	        // Handle a different exception, if needed
-//	        // Construct a response as needed
-//	    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
+        // Get the first violation message and return it as the response
+        String errorMessage = ex.getConstraintViolations().iterator().next().getMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 }

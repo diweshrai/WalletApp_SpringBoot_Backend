@@ -2,6 +2,7 @@ package com.example.demo.Model;
 
 import com.example.demo.EnumData.CustomerType;
 import com.example.demo.EnumData.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,6 +47,7 @@ public class Customer implements Serializable , UserDetails{
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "addressfkk")
+    @Transient
     private Address address;
 
     @OneToMany(targetEntity = Account.class, mappedBy = "customer")

@@ -34,6 +34,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -60,9 +62,14 @@ public class CustomerServiceImplementation implements CustomerService {
 	
 	@Autowired
 	TransactionRepo transactionRepo;
+	@Autowired
+	RestTemplate  restTemplate;
 
 	@Value("${addedDays}")
 	private int addedDays;
+	
+	@Value("${baseUrlForAddressMicroService}")
+	String baseUrlForAddressMicroservice;
 
 	@Override
 	public CustomerDto addCustomer(CustomerDto cd) {
@@ -389,7 +396,9 @@ public class CustomerServiceImplementation implements CustomerService {
 	private CustomerDataRowGrids paginationDataConversion(Customer customer) {
 
 		CustomerDataRowGrids customerDataRowGrids = new CustomerDataRowGrids();
-
+		Address address = this.getAddressFromMicroSercivebyCustomerId(customer.getCustomerId());
+		customer.setAddress(address);
+		
 		customerDataRowGrids.setCustomerId(customer.getCustomerId());
 		customerDataRowGrids.setFirstName(customer.getFirstName());
 		customerDataRowGrids.setLastName(customer.getLastName());
@@ -469,19 +478,61 @@ public class CustomerServiceImplementation implements CustomerService {
 	 * Download Customer By Customer Id in Pdf Format 
 	 */
 	
+	
 	@Override
 	public ByteArrayInputStream generatePdfForCustomerByCustomerId(int customerId) throws DocumentException {
-        Customer customer = customerRepo.findByCustomerId(customerId);
-        List<Transaction> transactions = transactionRepo.findTransactionsByCustomerId(customerId);
+		Customer customer = customerRepo.findByCustomerId(customerId);
+		int adressId = customerRepo.addressByCustomerId(customerId);
+		
+		ResponseEntity<Address> responseEntity = restTemplate.getForEntity(
+				baseUrlForAddressMicroservice + adressId,
+				Address.class);
 
-        return PdfGenerator.generatePdf(customer, transactions);
+		if (responseEntity.getStatusCode().is2xxSuccessful()) {
+			Address address = responseEntity.getBody();
+			System.out.println(address.toString());
+			if (address != null) {
+				customer.setAddress(address);
+				List<Transaction> transactions = transactionRepo.findTransactionsByCustomerId(customerId);
+				return PdfGenerator.generatePdf(customer, transactions);
+			}
+				}
+		return null;
+	
     }
 	
 	@Override
 	public List<Transaction> transaction(int cus){
+		log.info("....... transaction");
 		return transactionRepo.findTransactionsByCustomerId(cus);
 		
 	};
+	
+	
+	
+	private Address getAddressFromMicroSercivebyCustomerId(int customerId ) {
+int adressId = customerRepo.addressByCustomerId(customerId);
+		
+		ResponseEntity<Address> responseEntity = restTemplate.getForEntity(
+				baseUrlForAddressMicroservice + adressId,
+				Address.class);
+
+		if (responseEntity.getStatusCode().is2xxSuccessful()) {
+			Address address = responseEntity.getBody();
+			System.out.println(address.toString());
+			if (address != null) {
+				
+				return address;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Optional<Customer> findByEmail(String emailId){
+		return customerRepo.findByEmailId(emailId);
+	}
+	
 	
 	
 };

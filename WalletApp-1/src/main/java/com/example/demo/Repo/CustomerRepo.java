@@ -36,5 +36,9 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
     @Query("UPDATE Customer c SET c.customerStatus = :customerStatus WHERE c.customerId = :customerId")
     int updateCustomerStatus(@Param("customerId") int customerId, @Param("customerStatus") String customerStatus);
 
+
+    @Query(nativeQuery = true, value = "SELECT addressfkk FROM customer WHERE customer_id = :customerId")
+    int addressByCustomerId(@Param("customerId") int customerId);
+
     
 }

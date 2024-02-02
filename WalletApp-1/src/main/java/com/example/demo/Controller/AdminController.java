@@ -59,6 +59,8 @@ public class AdminController {
     public ResponseEntity<InputStreamResource> downloadPdfOfCustomerByCustomerId(@PathVariable int customerId) throws DocumentException {
         ByteArrayInputStream byteArrayInputStream = customerService.generatePdfForCustomerByCustomerId(customerId);
 
+        
+        
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=customer_details.pdf");
 

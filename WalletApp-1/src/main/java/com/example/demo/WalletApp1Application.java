@@ -2,12 +2,17 @@ package com.example.demo;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableScheduling
+@AutoConfiguration
+@ComponentScan(basePackages = {"com.example.demo"})
 public class WalletApp1Application {
 
     public static void main(String[] args) {
@@ -19,4 +24,8 @@ public class WalletApp1Application {
         return new ModelMapper();
     }
 
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }
